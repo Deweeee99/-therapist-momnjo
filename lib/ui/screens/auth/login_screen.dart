@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-// Nanti uncomment ini kalo udah bikin dummy navigasi
-// import 'package:therapist_momnjo/ui/navigation/main_nav.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -27,23 +25,20 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // Fungsi dummy buat simulasi login
+  // Fungsi buat simulasi login
   void _handleLogin() {
-    // Nanti di sini kita pasang logic nembak API dari temen lu
+    // Nanti di sini kita pasang logic nembak API
     debugPrint("Email: ${_emailController.text}");
     debugPrint("Password: ${_passwordController.text}");
     
-    // Sementara, langsung pindah ke halaman utama aja
-    /*
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const MainNavigation()), // Asumsi lu udah bikin file ini
-    );
-    */
-    
+    // Tampilkan pesan sukses sebentar
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Simulasi Login Berhasil, Tuan!')),
+      const SnackBar(content: Text('Login Berhasil, Tuan! Mengalihkan ke Home...')),
     );
+
+    // --- INI ROUTING KE HOME ---
+    // Pake pushReplacementNamed biar user ga bisa 'back' ke halaman login setelah masuk
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
@@ -54,12 +49,15 @@ class _LoginScreenState extends State<LoginScreen> {
         fit: StackFit.expand,
         children: [
           // 1. BACKGROUND GAMBAR (Sama kayak Splash)
+          /* // Sementara di-comment jika aset belum ada agar tidak error
           Image.asset(
             'assets/background.png',
             fit: BoxFit.cover,
           ),
+          */
 
           // 2. ORNAMEN DAUN 
+          /*
           Positioned(
             top: 0,
             right: 0,
@@ -70,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
             left: 0,
             child: Image.asset('assets/daun2.png', width: 160),
           ),
+          */
 
           // 3. KONTEN UTAMA DIBUNGKUS SCROLLVIEW
           SafeArea(
@@ -80,12 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const SizedBox(height: 20),
                   // --- BAGIAN LOGO & JUDUL ---
-                  Center(
+                  const Center(
                     child: Column(
                       children: [
-                        Image.asset('assets/logo_momnjo.png', width: 120),
-                        const SizedBox(height: 12),
-                        const Text(
+                        // Image.asset('assets/logo_momnjo.png', width: 120), // Uncomment kalo aset udah ada
+                        Icon(Icons.spa, size: 80, color: Color(0xFFF48FB1)), // Placeholder logo
+                        SizedBox(height: 12),
+                        Text(
                           'Therapis Home Care',
                           style: TextStyle(
                             fontSize: 14,
@@ -279,7 +279,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   // --- TOMBOL MASUK DENGAN OTP ---
                   OutlinedButton.icon(
                     onPressed: () {
-                      // TODO: Navigasi ke halaman OTP
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Fitur OTP coming soon, Tuan!')),
                       );
@@ -319,6 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
+                                // Pake pushNamed biasa biar dari register bisa back ke login
                                 Navigator.pushNamed(context, '/register');
                               },
                           ),

@@ -56,7 +56,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black87),
           onPressed: () {
-            // Logika kembali, atau hapus jika ini adalah main tab di BottomNav
+            // Logika kembali
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
             }
@@ -211,72 +211,78 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
   }
 
-  // 4. Card Item Jadwal
+  // 4. Card Item Jadwal (Sudah dilengkapi navigasi ke detail)
   Widget _buildScheduleCard(Map<String, dynamic> schedule) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Kolom Waktu
-          SizedBox(
-            width: 50,
-            child: Text(
-              schedule['time'],
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        // Navigasi ke halaman detail booking ketika kartu diklik
+        Navigator.pushNamed(context, '/booking_detail');
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Kolom Waktu
+            SizedBox(
+              width: 50,
+              child: Text(
+                schedule['time'],
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-          
-          // Kolom Detail
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        schedule['name'],
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+            const SizedBox(width: 12),
+            
+            // Kolom Detail
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          schedule['name'],
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    _buildStatusBadge(schedule['status']),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  schedule['service'],
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  schedule['address'],
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
-                ),
-              ],
+                      _buildStatusBadge(schedule['status']),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    schedule['service'],
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    schedule['address'],
+                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

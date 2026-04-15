@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:therapist_momnjo/ui/screens/booking_detail_screen.dart';
 
-// Import semua screen yang mau didaftarin rutenya di sini
+// Import semua screen yang sudah dibuat
 import 'package:therapist_momnjo/ui/screens/splash_screen.dart';
 import 'package:therapist_momnjo/ui/screens/auth/login_screen.dart';
 import 'package:therapist_momnjo/ui/screens/auth/register_screen.dart';
-// import 'package:therapist_momnjo/ui/navigation/main_nav.dart'; // Nanti kalo udah ada, uncomment
+import 'package:therapist_momnjo/ui/screens/home_screen.dart';
+import 'package:therapist_momnjo/ui/screens/schedule_screen.dart';
+import 'package:therapist_momnjo/ui/screens/visit_report_screen.dart';
+import 'package:therapist_momnjo/ui/screens/arrival_checkin_screen.dart';
+import 'package:therapist_momnjo/ui/screens/chat_admin_screen.dart';
 
 void main() {
+  // Memastikan binding Flutter sudah terinisialisasi
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MomnjoTherapistApp());
 }
@@ -20,11 +26,15 @@ class MomnjoTherapistApp extends StatelessWidget {
       title: 'Momnjo Terapis',
       debugShowCheckedModeBanner: false, 
       
+      // Pengaturan Tema Global Aplikasi
       theme: ThemeData(
+        useMaterial3: true,
         primaryColor: const Color(0xFFF48FB1), 
-        colorScheme: ColorScheme.fromSwatch().copyWith(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFFF48FB1),
           primary: const Color(0xFFF48FB1),
-          secondary: const Color(0xFFFFEBEE), 
+          secondary: const Color(0xFFFFEBEE),
+          surface: Colors.white,
         ),
         fontFamily: 'Poppins', 
         
@@ -35,26 +45,47 @@ class MomnjoTherapistApp extends StatelessWidget {
           titleTextStyle: TextStyle(
             color: Colors.black87, 
             fontSize: 18, 
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
           ),
           centerTitle: true,
         ),
+        
         scaffoldBackgroundColor: const Color(0xFFFAFAFA), 
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFF48FB1),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            textStyle: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
       ),
 
-      // --- INI DIA MAGIC-NYA: NAMED ROUTES ---
-      // initialRoute itu ibarat titik start pertama kali app dibuka
+      // Halaman pertama yang akan muncul saat app dibuka
       initialRoute: '/', 
       
-      // Di sini lu daftarin semua "jalan" di aplikasi lu
+      // Daftar rute aplikasi
       routes: {
-        '/': (context) => const SplashScreen(), // Rute '/' default ke Splash
-        '/login': (context) => const LoginScreen(), // Rute '/login' arahin ke LoginScreen
-        '/register': (context) => const RegisterScreen(), // Rute '/register' arahin ke RegisterScreen
-        
-        // Nanti kalo halaman lain udah jadi, tinggal lu tambahin di mari:
-        // '/main': (context) => const MainNavigation(),
-        // '/active_job': (context) => const ActiveJobScreen(),
+        '/': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/schedule': (context) => const ScheduleScreen(),
+        '/visit_report': (context) => const VisitReportScreen(),
+        '/arrival_checkin': (context) => const ArrivalCheckinScreen(),
+        '/chat_admin': (context) => const ChatAdminScreen(),
+        '/booking_detail': (context) => const BookingDetailScreen(),
+      },
+
+      // Fallback jika rute yang dituju tidak ditemukan
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => const SplashScreen(),
+        );
       },
     );
   }

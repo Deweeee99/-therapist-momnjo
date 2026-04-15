@@ -16,48 +16,59 @@ class _HomeScreenState extends State<HomeScreen> {
     const primaryPink = Color(0xFFF48FB1);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 1. Header Profile & Notifikasi
-              _buildHeader(),
-              const SizedBox(height: 24),
+      // Buat background scaffold transparan agar gambar dari Container di body bisa terlihat full
+      backgroundColor: Colors.transparent, 
+      
+      // Bungkus seluruh body dengan Container untuk memberikan background image
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/background.jpg'), // Pastikan pubspec.yaml sudah diatur untuk membaca folder assets/
+            fit: BoxFit.cover, // Agar gambar memenuhi seluruh layar
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Header Profile & Notifikasi
+                _buildHeader(),
+                const SizedBox(height: 24),
 
-              // 2. Card Status Kerja
-              _buildStatusCard(),
-              const SizedBox(height: 24),
+                // 2. Card Status Kerja
+                _buildStatusCard(),
+                const SizedBox(height: 24),
 
-              // 3. Ringkasan Hari Ini
-              const Text(
-                'Ringkasan Hari Ini',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              _buildSummarySection(primaryPink),
-              const SizedBox(height: 24),
+                // 3. Ringkasan Hari Ini
+                const Text(
+                  'Ringkasan Hari Ini',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                ),
+                const SizedBox(height: 12),
+                _buildSummarySection(primaryPink),
+                const SizedBox(height: 24),
 
-              // 4. Booking Berikutnya
-              const Text(
-                'Booking Berikutnya',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              _buildNextBookingCard(primaryPink),
-              const SizedBox(height: 24),
+                // 4. Booking Berikutnya
+                const Text(
+                  'Booking Berikutnya',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                ),
+                const SizedBox(height: 12),
+                _buildNextBookingCard(context, primaryPink),
+                const SizedBox(height: 24),
 
-              // 5. Aksi Cepat
-              const Text(
-                'Aksi Cepat',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              _buildQuickActions(),
-              const SizedBox(height: 20),
-            ],
+                // 5. Aksi Cepat
+                const Text(
+                  'Aksi Cepat',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                ),
+                const SizedBox(height: 12),
+                _buildQuickActions(context), // Meneruskan context ke fungsi ini untuk navigasi
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
@@ -66,11 +77,17 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          // Tambahkan logika perpindahan layar di sini
+          if (index == 1) { 
+            Navigator.pushNamed(context, '/schedule');
+          } else {
+            setState(() {
+              _currentIndex = index;
+            });
+          }
         },
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white, // Set warna background bottom nav agar rapi
         selectedItemColor: primaryPink,
         unselectedItemColor: Colors.grey,
         selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
@@ -91,9 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHeader() {
     return Row(
       children: [
-        const CircleAvatar(
+        // Menggunakan Icon sebagai pengganti NetworkImage untuk menghindari error CORS di Flutter Web
+        CircleAvatar(
           radius: 24,
-          backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'), // Placeholder foto Rina
+          backgroundColor: Colors.pink.shade100,
+          child: const Icon(Icons.person, color: Colors.white, size: 30),
         ),
         const SizedBox(width: 12),
         Column(
@@ -101,18 +120,18 @@ class _HomeScreenState extends State<HomeScreen> {
           children: const [
             Text(
               'Selamat pagi,',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: TextStyle(fontSize: 12, color: Colors.black54), // Sedikit digelapkan agar terbaca di atas background
             ),
             Text(
               'Rina Terapis',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
           ],
         ),
         const Spacer(),
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.notifications_none_rounded, size: 28),
+          icon: const Icon(Icons.notifications_none_rounded, size: 28, color: Colors.black87),
         ),
       ],
     );
@@ -274,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildNextBookingCard(Color primaryColor) {
+  Widget _buildNextBookingCard(BuildContext context, Color primaryColor) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -330,7 +349,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Navigasi ke halaman detail booking
+              Navigator.pushNamed(context, '/booking_detail');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
               elevation: 0,
@@ -353,35 +375,59 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildQuickActions() {
+  // Menambahkan context agar bisa pindah halaman
+  Widget _buildQuickActions(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildActionItem(Icons.calendar_month, 'Jadwal', Colors.orange.shade100, Colors.orange),
-        _buildActionItem(Icons.history, 'Riwayat', Colors.pink.shade50, Colors.pink),
-        _buildActionItem(Icons.assignment_turned_in, 'Absensi', Colors.blue.shade50, Colors.blue),
-        _buildActionItem(Icons.chat_bubble_outline, 'Chat Admin', Colors.teal.shade50, Colors.teal),
+        _buildActionItem(Icons.calendar_month, 'Jadwal', Colors.white, Colors.orange, onTap: () {
+          // Logika navigasi ke Jadwal
+          Navigator.pushNamed(context, '/schedule');
+        }),
+        _buildActionItem(Icons.history, 'Riwayat', Colors.white, Colors.pink, onTap: () {
+          // Logika navigasi ke Visit Report / Riwayat
+          Navigator.pushNamed(context, '/visit_report');
+        }),
+        _buildActionItem(Icons.assignment_turned_in, 'Absensi', Colors.white, Colors.blue, onTap: () {
+          // Logika navigasi ke Check-in Lokasi / Absensi
+          Navigator.pushNamed(context, '/arrival_checkin');
+        }),
+        _buildActionItem(Icons.chat_bubble_outline, 'Chat Admin', Colors.white, Colors.teal, onTap: () {
+          // Navigasi ke Chat admin
+          Navigator.pushNamed(context, '/chat_admin');
+        }),
       ],
     );
   }
 
-  Widget _buildActionItem(IconData icon, String label, Color bgColor, Color iconColor) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(12),
+  // Menambahkan parameter onTap dan membungkusnya dengan GestureDetector
+  Widget _buildActionItem(IconData icon, String label, Color bgColor, Color iconColor, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap, // Sekarang kalau diklik akan menjalankan fungsi onTap
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: iconColor, size: 24),
           ),
-          child: Icon(icon, color: iconColor, size: 24),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.black87),
+          ),
+        ],
+      ),
     );
   }
 }
