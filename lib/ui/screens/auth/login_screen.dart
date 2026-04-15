@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // --- INI ROUTING KE HOME ---
     // Pake pushReplacementNamed biar user ga bisa 'back' ke halaman login setelah masuk
-    Navigator.pushReplacementNamed(context, '/home');
+    Navigator.pushReplacementNamed(context, '/main');
   }
 
   @override
@@ -79,13 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const SizedBox(height: 20),
                   // --- BAGIAN LOGO & JUDUL ---
-                  const Center(
+                  Center(
                     child: Column(
                       children: [
-                        // Image.asset('assets/logo_momnjo.png', width: 120), // Uncomment kalo aset udah ada
-                        Icon(Icons.spa, size: 80, color: Color(0xFFF48FB1)), // Placeholder logo
-                        SizedBox(height: 12),
-                        Text(
+                        // Logo Momnjo diaktifkan
+                        Image.asset('assets/logo_momnjo.png', width: 120), 
+                        const SizedBox(height: 12),
+                        const Text(
                           'Therapis Home Care',
                           style: TextStyle(
                             fontSize: 14,

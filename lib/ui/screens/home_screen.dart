@@ -8,7 +8,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0; // Untuk Bottom Navigation Bar
+  // Variabel _currentIndex sudah dihapus karena urusan tab sekarang diurus oleh MainWrapperScreen di main.dart
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/background.jpg'), // Pastikan pubspec.yaml sudah diatur untuk membaca folder assets/
+            image: AssetImage('assets/background.png'), // Pastikan pubspec.yaml sudah diatur untuk membaca folder assets/
             fit: BoxFit.cover, // Agar gambar memenuhi seluruh layar
           ),
         ),
@@ -72,34 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          // Tambahkan logika perpindahan layar di sini
-          if (index == 1) { 
-            Navigator.pushNamed(context, '/schedule');
-          } else {
-            setState(() {
-              _currentIndex = index;
-            });
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white, // Set warna background bottom nav agar rapi
-        selectedItemColor: primaryPink,
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontSize: 12),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), label: 'Schedule'),
-          BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined), label: 'Activity'),
-          BottomNavigationBarItem(icon: Icon(Icons.monetization_on_outlined), label: 'Earnings'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Account'),
-        ],
-      ),
+      // bottomNavigationBar sudah DIHAPUS dari sini biar tidak numpuk
     );
   }
 
@@ -381,19 +354,17 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildActionItem(Icons.calendar_month, 'Jadwal', Colors.white, Colors.orange, onTap: () {
-          // Logika navigasi ke Jadwal
+          // Navigasi tidak pakai pushNamed lagi kalau mau pindah tab.
+          // Tapi sementara biarkan pakai rute langsung untuk fitur Aksi Cepat.
           Navigator.pushNamed(context, '/schedule');
         }),
         _buildActionItem(Icons.history, 'Riwayat', Colors.white, Colors.pink, onTap: () {
-          // Logika navigasi ke Visit Report / Riwayat
           Navigator.pushNamed(context, '/visit_report');
         }),
         _buildActionItem(Icons.assignment_turned_in, 'Absensi', Colors.white, Colors.blue, onTap: () {
-          // Logika navigasi ke Check-in Lokasi / Absensi
           Navigator.pushNamed(context, '/arrival_checkin');
         }),
         _buildActionItem(Icons.chat_bubble_outline, 'Chat Admin', Colors.white, Colors.teal, onTap: () {
-          // Navigasi ke Chat admin
           Navigator.pushNamed(context, '/chat_admin');
         }),
       ],
